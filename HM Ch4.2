@@ -1,0 +1,62 @@
+// Make it work
+use std::mem::size_of_val;
+fn main() {
+    let c1 = 'a';
+    assert_eq!(size_of_val(&c1),1); 
+
+    let c2 = '中';
+    assert_eq!(size_of_val(&c2),3); 
+
+    println!("Success!");
+} 
+-----------------------------------------------------
+fn main() {
+    let c1 = '中';
+    print_char(c1);
+} 
+
+fn print_char(c: char) {
+    println!("{}", c);
+}
+-----------------------------------------------------
+fn main() {
+    let _f: bool = false;
+
+    let t = false; 
+    if !t {
+        println!("Success!");
+    }
+}
+-----------------------------------------------------
+fn main() {
+    let f = false; // Змінив значення з true на false, щоб відповідало виразу `true && false`
+    let t = true && false; // Цей вираз завжди дає false
+    assert_eq!(t, f); // Тепер обидві змінні мають значення false
+
+    println!("Success!");
+}
+-----------------------------------------------------
+fn main() {
+    let _v: () = ();
+
+    let v = (); // Змінив тип змінної `v` на `()` (unit type), оскільки функція `implicitly_ret_unit` повертає `()`
+    assert_eq!(v, implicitly_ret_unit()); // Тепер обидва значення — unit type `()`
+
+    println!("Success!");
+}
+
+fn implicitly_ret_unit() {
+    println!("I will return a ()");
+}
+
+fn explicitly_ret_unit() -> () {
+    println!("I will return a ()");
+}
+-----------------------------------------------------
+use std::mem::size_of_val;
+fn main() {
+    let unit: () = ();
+    assert!(size_of_val(&unit) == 0); // Змінив 4 на 0, оскільки тип `()` не займає місця в пам'яті
+
+    println!("Success!");
+}
