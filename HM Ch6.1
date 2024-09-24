@@ -1,0 +1,130 @@
+fn main() {
+    let s: &str = "hello, world"; // Зміна типу з `str` на `&str`
+
+    println!("Success!");
+}
+
+---------------------------------------------------------------------------------------------------------
+fn main() {
+    let s: Box<str> = "hello, world".into();
+    greetings(s.as_ref()) // Використовуємо as_ref() для отримання &str
+}
+
+fn greetings(s: &str) {
+    println!("{}", s);
+}
+
+---------------------------------------------------------------------------------------------------------
+fn main() {
+    let mut s = String::new(); // Ініціалізуємо змінну s як новий пустий рядок
+    s.push_str("hello, world");
+    s.push('!');
+
+    assert_eq!(s, "hello, world!");
+
+    println!("Success!");
+}
+
+---------------------------------------------------------------------------------------------------------
+fn main() {
+    let mut s = String::from("hello"); // Зробити s змінною
+    s.push(','); 
+    s.push_str(" world"); // Використовувати push_str для рядка
+    s.push('!'); // Використовувати push для символу
+
+    println!("{}", s);
+}
+
+---------------------------------------------------------------------------------------------------------
+fn main() {
+    let s = String::from("I like dogs");
+    // Allocate new memory and store the modified string there
+    let s1 = s.replace("dogs", "cats");
+
+    assert_eq!(s1, "I like cats");
+
+    println!("Success!");
+}
+
+---------------------------------------------------------------------------------------------------------
+fn main() {
+    let s1 = String::from("hello,");
+    let s2 = String::from("world!");
+    let s3 = s1.clone() + &s2; // Додано `clone()` для `s1` і передано `s2` за посиланням
+    assert_eq!(s3, "hello,world!");
+    println!("{}", s1);
+}
+
+---------------------------------------------------------------------------------------------------------
+fn main() {
+    let s = "hello, world";
+    greetings(s)
+}
+
+fn greetings(s: &str) { // Змінено з String на &str
+    println!("{}", s)
+}
+
+---------------------------------------------------------------------------------------------------------
+fn main() {
+    let s = "hello, world".to_string();
+    let s1: String = s; // Змінено тип s1 на String
+
+    println!("Success!");
+}
+
+---------------------------------------------------------------------------------------------------------
+fn main() {
+    let byte_escape = "I'm writing Ru\x73st!"; // Додано 'st' після 'Ru' для завершення рядка "I'm writing Rust"
+    println!("What are you doing\x3F (\\x3F means ?) {}", byte_escape);
+
+    let unicode_codepoint = "\u{211D}";
+    let character_name = "\"DOUBLE-STRUCK CAPITAL R\"";
+
+    println!("Unicode character {} (U+211D) is called {}",
+                unicode_codepoint, character_name );
+
+    let long_string = "String literals
+                        can span multiple lines.
+                        The linebreak and indentation here \
+                         can be escaped too!";
+    println!("{}", long_string);
+}
+
+---------------------------------------------------------------------------------------------------------
+fn main() {
+    let raw_str = r"Escapes don't work here: ? ℝ"; // Додано '?' і 'ℝ' замість escape-послідовностей
+    assert_eq!(raw_str, "Escapes don't work here: ? ℝ");
+
+    let quotes = r#"And then I said: "There is no escape!""#;
+    println!("{}", quotes);
+
+    let delimiter = r###"A string with "# in it. And even "##!"###;
+    println!("{}", delimiter);
+
+    let long_delimiter = r#"Hello, "##""#; // Додано правильне сире рядкове літерал
+    assert_eq!(long_delimiter, "Hello, \"##\"");
+
+    println!("Success!");
+}
+
+---------------------------------------------------------------------------------------------------------
+fn main() {
+    let s1 = String::from("hi,中国");
+    
+    let h = &s1[0..1]; // Змінив `s1[0]` на `&s1[0..1]`, щоб отримати байт 'h' як рядок
+    assert_eq!(h, "h");
+
+    let h1 = &s1[3..4]; // Змінив `&s1[3..5]` на `&s1[3..4]`, щоб правильно отримати символ '中', який займає 3 байти
+    assert_eq!(h1, "中");
+
+    println!("Success!");
+}
+
+---------------------------------------------------------------------------------------------------------
+fn main() {
+    // Замінив `__` на `chars()` для ітерації через кожен символ в рядку
+    for c in "你好，世界".chars() {
+        println!("{}", c)
+    }
+}
