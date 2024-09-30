@@ -1,0 +1,182 @@
+enum Number {
+    Zero,
+    One,
+    Two,
+}
+
+enum Number1 {
+    Zero = 0,
+    One = 1,
+    Two = 2,
+}
+
+// C-like enum, використано цілі значення
+enum Number2 {
+    Zero = 0,
+    One = 1,
+    Two = 2,
+}
+
+fn main() {
+    // An enum variant can be converted to an integer by `as`
+    assert_eq!(Number::One as i32, Number1::One as i32);
+    assert_eq!(Number1::One as i32, Number2::One as i32);
+
+    println!("Success!");
+}
+
+--------------------------------------------------------------------------------
+enum Message {
+    Quit,
+    Move { x: i32, y: i32 },
+    Write(String),
+    ChangeColor(i32, i32, i32),
+}
+
+fn main() {
+    let msg1 = Message::Move { x: 1, y: 2 }; // Ініціалізація з x = 1, y = 2
+    let msg2 = Message::Write(String::from("hello, world!")); // Ініціалізація з "hello, world!"
+
+    println!("Success!");
+}
+
+--------------------------------------------------------------------------------
+enum Message {
+    Quit,
+    Move { x: i32, y: i32 },
+    Write(String),
+    ChangeColor(i32, i32, i32),
+}
+
+fn main() {
+    let msg = Message::Move { x: 1, y: 2 };
+
+    // Використання шаблону для отримання значень x і y
+    if let Message::Move { x: a, y: b } = msg {
+        assert_eq!(a, 1); // Перевірка значення a
+        assert_eq!(b, 2); // Перевірка значення b
+    } else {
+        panic!("NEVER LET THIS RUN！");
+    }
+
+    println!("Success!");
+}
+
+--------------------------------------------------------------------------------
+#[derive(Debug)] // Додаємо трейт Debug для можливості виводу
+enum Message {
+    Quit,
+    Move { x: i32, y: i32 },
+    Write(String),
+    ChangeColor(i32, i32, i32),
+}
+
+fn main() {
+    // Оголошуємо масив типу Message
+    let msgs: [Message; 3] = [
+        Message::Quit,
+        Message::Move { x: 1, y: 3 },
+        Message::ChangeColor(255, 255, 0),
+    ];
+
+    for msg in msgs {
+        show_message(msg)
+    }
+} 
+
+fn show_message(msg: Message) {
+    // Виводимо повідомлення за допомогою Debug
+    println!("{:?}", msg);
+}
+
+--------------------------------------------------------------------------------
+fn main() {
+    let five = Some(5);
+    let six = plus_one(five);
+    let none = plus_one(None);
+
+    // Додаємо обробку для випадку, коли six має значення
+    if let Some(n) = six {
+        println!("{}", n);
+        println!("Success!");
+    } else {
+        // Запобігаємо паніці, якщо six є None
+        println!("six is None");
+    } 
+        
+    panic!("NEVER LET THIS RUN！"); // Цей рядок не повинен виконуватись
+} 
+
+fn plus_one(x: Option<i32>) -> Option<i32> {
+    match x {
+        None => None, // Обробка для None
+        Some(i) => Some(i + 1), // Обробка для значення i
+    }
+}
+
+--------------------------------------------------------------------------------
+use crate::List::*;
+
+enum List {
+    // Cons: Кортежна структура, яка обгортає елемент і вказівник на наступний вузол
+    Cons(u32, Box<List>),
+    // Nil: Вузол, що позначає кінець зв'язаного списку
+    Nil,
+}
+
+// Методи можуть бути прив'язані до enum
+impl List {
+    // Створити порожній список
+    fn new() -> List {
+        // `Nil` має тип `List`
+        Nil
+    }
+
+    // Спожити список і повернути той же список з новим елементом на його початку
+    fn prepend(self, elem: u32) -> List {
+        // `Cons` також має тип List
+        Cons(elem, Box::new(self))
+    }
+
+    // Повернути довжину списку
+    fn len(&self) -> u32 {
+        // `self` потрібно зіставити, оскільки поведінка цього методу
+        // залежить від варіанту `self`
+        match *self {
+            // Не можна забрати володіння хвостом, оскільки `self` запозичений;
+            // Замість цього взяти посилання на хвіст
+            Cons(_, ref tail) => 1 + tail.len(),
+            // Базовий випадок: порожній список має нульову довжину
+            Nil => 0,
+        }
+    }
+
+    // Повернути представлення списку як (виділена пам'ять) рядок
+    fn stringify(&self) -> String {
+        match *self {
+            Cons(head, ref tail) => {
+                // `format!` подібний до `print!`, але повертає рядок, 
+                // виділений у пам'яті, замість того, щоб друкувати в консоль
+                format!("{}, {}", head, tail.stringify())
+            },
+            Nil => {
+                format!("Nil")
+            },
+        }
+    }
+}
+
+fn main() {
+    // Створити порожній зв'язаний список
+    let mut list = List::new();
+
+    // Додати кілька елементів на початок списку
+    list = list.prepend(1);
+    list = list.prepend(2);
+    list = list.prepend(3);
+
+    // Показати фінальний стан списку
+    println!("Довжина зв'язаного списку: {}", list.len());
+    println!("{}", list.stringify());
+}
+
