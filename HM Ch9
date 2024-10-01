@@ -1,0 +1,145 @@
+struct Rectangle {
+    width: u32,
+    height: u32,
+}
+
+impl Rectangle {
+    // Завершено метод area, який повертає площу прямокутника
+    fn area(&self) -> u32 { // Додано параметр &self і повертається u32
+        self.width * self.height // Площа = ширина * висота
+    }
+}
+
+fn main() {
+    let rect1 = Rectangle { width: 30, height: 50 };
+
+    assert_eq!(rect1.area(), 1500);
+
+    println!("Success!");
+}
+
+----------------------------------------------------------------------------------------------------------------
+#[derive(Debug)]
+struct TrafficLight {
+    color: String,
+}
+
+impl TrafficLight {
+    pub fn show_state(&self) { // Додано &self, щоб не брати володіння
+        println!("the current state is {}", self.color); // Використано self для доступу до поля color
+    }
+}
+
+fn main() {
+    let light = TrafficLight {
+        color: "red".to_owned(),
+    };
+    // Don't take the ownership of `light` here.
+    light.show_state();
+    // ... Otherwise, there will be an error below
+    println!("{:?}", light);
+}
+
+----------------------------------------------------------------------------------------------------------------
+struct TrafficLight {
+    color: String,
+}
+
+impl TrafficLight {
+    // Використання `Self` для заповнення пропуску.
+    pub fn show_state(&self) { // Додано &self для доступу до полів
+        println!("the current state is {}", self.color);
+    }
+
+    // Заповнити пропуск, не використовуючи жодних варіантів `Self`.
+    pub fn change_state(&mut self) { // Додано &mut self для зміни поля
+        self.color = "green".to_string();
+    }
+}
+
+fn main() {
+    let mut light = TrafficLight { color: "red".to_string() };
+    light.show_state(); // Виведе: the current state is red
+    light.change_state(); // Змінює колір на green
+    light.show_state(); // Виведе: the current state is green
+
+    println!("Success!");
+}
+
+----------------------------------------------------------------------------------------------------------------
+#[derive(Debug)]
+struct TrafficLight {
+    color: String,
+}
+
+impl TrafficLight {
+    pub fn new() -> Self { // Використано Self для посилання на TrafficLight
+        Self { color: "red".to_string() } // Повертається новий об'єкт з кольором "red"
+    }
+
+    pub fn get_state(&self) -> &str {
+        &self.color
+    }
+}
+
+fn main() {
+    let light = TrafficLight::new();
+    assert_eq!(light.get_state(), "red");
+
+    println!("Success!");
+}
+
+----------------------------------------------------------------------------------------------------------------
+struct Rectangle {
+    width: u32,
+    height: u32,
+}
+
+// Перший блок impl для Rectangle
+impl Rectangle {
+    // Метод для обчислення площі прямокутника
+    fn area(&self) -> u32 {
+        self.width * self.height
+    }
+}
+
+// Другий блок impl для Rectangle
+impl Rectangle {
+    // Метод для перевірки, чи може один прямокутник вмістити інший
+    fn can_hold(&self, other: &Rectangle) -> bool {
+        self.width > other.width && self.height > other.height
+    }
+}
+
+fn main() {
+    println!("Success!");
+}
+
+----------------------------------------------------------------------------------------------------------------
+#[derive(Debug)]
+enum TrafficLightColor {
+    Red,
+    Yellow,
+    Green,
+}
+
+// Реалізація TrafficLightColor з методом color
+impl TrafficLightColor {
+    // Метод для повернення рядкового представлення кольору
+    pub fn color(&self) -> &str {
+        match self {
+            TrafficLightColor::Red => "red",
+            TrafficLightColor::Yellow => "yellow",
+            TrafficLightColor::Green => "green",
+        }
+    }
+}
+
+fn main() {
+    let c = TrafficLightColor::Yellow;
+
+    assert_eq!(c.color(), "yellow");
+
+    println!("{:?}", c);
+}
+
