@@ -1,0 +1,163 @@
+enum Direction {
+    East,
+    West,
+    North,
+    South,
+}
+
+fn main() {
+    let dire = Direction::South;
+    match dire {
+        Direction::East => println!("East"),
+        Direction::South | Direction::North => { // Відповідність для South або North
+            println!("South or North");
+        },
+        _ => println!("West"), // Заповнено пусте місце
+    };
+}
+----------------------------------------------------------------------------------------------------------------
+fn main() {
+    let boolean = true;
+
+    // Заповнено місце з виразом match:
+    //
+    // boolean = true => binary = 1
+    // boolean = false => binary = 0
+    let binary = match boolean {
+        true => 1,   // Якщо boolean істинний, присвоїти 1
+        false => 0,  // Якщо boolean хибний, присвоїти 0
+    };
+
+    assert_eq!(binary, 1);
+
+    println!("Success!");
+}
+
+----------------------------------------------------------------------------------------------------------------
+enum Message {
+    Quit,
+    Move { x: i32, y: i32 },
+    Write(String),
+    ChangeColor(i32, i32, i32),
+}
+
+fn main() {
+    let msgs = [
+        Message::Quit,
+        Message::Move { x: 1, y: 3 },
+        Message::ChangeColor(255, 255, 0),
+    ];
+
+    for msg in msgs {
+        show_message(msg);
+    }
+
+    println!("Success!");
+}
+
+fn show_message(msg: Message) {
+    match msg {
+        Message::Move { x: a, y: b } => { // Змінено для відповідності Message::Move
+            assert_eq!(a, 1);
+            assert_eq!(b, 3);
+        },
+        Message::ChangeColor(_, g, b) => {
+            assert_eq!(g, 255); // Заповнено для перевірки
+            assert_eq!(b, 0);   // Заповнено для перевірки
+        }
+        _ => println!("no data in these variants"),
+    }
+}
+
+----------------------------------------------------------------------------------------------------------------
+fn main() {
+    let alphabets = ['a', 'E', 'Z', '0', 'x', '9', 'Y'];
+
+    // Заповнено з використанням `matches!`, щоб перевірити, чи символ — велика літера
+    for ab in alphabets {
+        assert!(matches!(ab, 'A'..='Z')); // Перевіряємо, чи входить в діапазон великих літер
+    }
+
+    println!("Success!");
+}
+
+----------------------------------------------------------------------------------------------------------------
+enum MyEnum {
+    Foo,
+    Bar,
+}
+
+fn main() {
+    let mut count = 0;
+
+    let v = vec![MyEnum::Foo, MyEnum::Bar, MyEnum::Foo];
+    for e in v {
+        // Змінено для використання `matches!`, щоб порівняти значення enum
+        if matches!(e, MyEnum::Foo) { 
+            count += 1;
+        }
+    }
+
+    assert_eq!(count, 2);
+
+    println!("Success!");
+}
+
+----------------------------------------------------------------------------------------------------------------
+fn main() {
+    let o = Some(7);
+
+    // Заміна блоку match на if let
+    if let Some(i) = o {
+        println!("This is a really long string and `{:?}`", i);
+        println!("Success!");
+    }
+}
+
+----------------------------------------------------------------------------------------------------------------
+enum Foo {
+    Bar(u8),
+}
+
+fn main() {
+    let a = Foo::Bar(1);
+
+    match a {
+        Foo::Bar(i) => { // Заміна __ на match для отримання значення
+            println!("foobar holds the value: {}", i);
+            println!("Success!");
+        }
+    }
+}
+
+----------------------------------------------------------------------------------------------------------------
+enum Foo {
+    Bar,
+    Baz,
+    Qux(u32),
+}
+
+fn main() {
+    let a = Foo::Qux(10);
+
+    // Заміна умовних операторів на match
+    match a {
+        Foo::Bar => println!("match foo::bar"),
+        Foo::Baz => println!("match foo::baz"),
+        _ => println!("match others"),
+    }
+}
+
+----------------------------------------------------------------------------------------------------------------
+fn main() {
+    let age = Some(30);
+    if let Some(age) = age { // Створюємо нову змінну з таким самим ім'ям, як у попередньому `age`
+       assert_eq!(age, 30); // Виправлено: порівнюємо з 30, а не з Some(30)
+    } // Нова змінна `age` виходить з області видимості тут
+    
+    match age {
+        // Match також може вводити нову затінюючу змінну
+        Some(age) =>  println!("age is a new variable, it's value is {}", age), // Тут age - це знову нова змінна
+        _ => ()
+    }
+}
